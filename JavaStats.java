@@ -34,25 +34,6 @@ public class JavaStats
                     n++;
                 }
             } while (sLen > 0);
-            
-            if (n > 0)
-            {
-                minmax = ComputeExtremes(dArrL);
-                mean = ComputeMean(dArrL);
-                System.out.printf("For %d data point(s), \n", n);
-                System.out.printf("    the maximum is %.2f\n", minmax[1]);
-                System.out.printf("    the minimum is %.2f\n", minmax[0]);
-                System.out.printf("    the mean (average) is %.2f\n", mean);
-                if (n > 1)    // std dev is only defined if n > 1
-                {
-                    stdev = ComputeStdev(dArrL, mean);
-                    System.out.printf("    the std dev is %.2f\n", stdev);
-                }
-            }
-            else
-            {
-                System.out.println("No data was entered.");
-            }
         }
         else if (mode == 2)    // data read from file
         {
@@ -94,32 +75,37 @@ public class JavaStats
                             System.out.printf("Data point %d: %.2f\n", i + 1, dArrL.get(i));
                         }                    
                     }
-                    
-                    minmax = ComputeExtremes(dArrL);
-                    mean = ComputeMean(dArrL);
-                    System.out.printf("For %d data point(s), \n", n);
-                    System.out.printf("    the maximum is %.2f\n", minmax[1]);
-                    System.out.printf("    the minimum is %.2f\n", minmax[0]);
-                    System.out.printf("    the mean (average) is %.2f\n", mean);
-                    if (n > 1)    // std dev is only defined if n > 1
-                    {
-                        stdev = ComputeStdev(dArrL, mean);
-                        System.out.printf("    the std dev is %.2f\n", stdev);
-                    }
-                }
-                else
-                {
-                    System.out.printf("File %s contains no data.\n", fName);
                 }
             }
             else
             {
                 System.out.printf("File %s does not exist.\n", fName);
+                return;
             }
         }
         else
         {
             System.out.println("Invalid mode; exiting program.");
+            return;
+        }
+        
+        if (n > 0)
+        {
+            minmax = ComputeExtremes(dArrL);
+            mean = ComputeMean(dArrL);
+            System.out.printf("For %d data point(s), \n", n);
+            System.out.printf("    the maximum is %.2f\n", minmax[1]);
+            System.out.printf("    the minimum is %.2f\n", minmax[0]);
+            System.out.printf("    the mean (average) is %.2f\n", mean);
+            if (n > 1)    // std dev is only defined if n > 1
+            {
+                stdev = ComputeStdev(dArrL, mean);
+                System.out.printf("    the std dev is %.2f\n", stdev);
+            }        
+        }
+        else
+        {
+            System.out.println("No data points to be analyzed.");
         }
     }
     
@@ -187,15 +173,14 @@ public class JavaStats
             stdev = Math.sqrt(sum / (double) (n - 1));
         }
 
-        return stdev;    // returns 0.0 if n < 2
+        return stdev;    // returns 0 if n < 2
     }
     
 }
 
 /*
  ----jGRASP exec: java JavaStats
-Enter 1 for keyboard input, 2 for file input: 
-1
+Enter 1 for keyboard input, 2 for file input: 1
 When no more data is left to enter, simply hit return.
 Data point 1: 1
 Data point 2: 2
@@ -213,8 +198,7 @@ For 6 data point(s),
  ----jGRASP: operation complete.
 
  ----jGRASP exec: java JavaStats
-Enter 1 for keyboard input, 2 for file input: 
-1
+Enter 1 for keyboard input, 2 for file input: 1
 When no more data is left to enter, simply hit return.
 Data point 1: 3.5
 Data point 2: 
@@ -226,17 +210,15 @@ For 1 data point(s),
  ----jGRASP: operation complete.
 
  ----jGRASP exec: java JavaStats
-Enter 1 for keyboard input, 2 for file input: 
-1
+Enter 1 for keyboard input, 2 for file input: 1
 When no more data is left to enter, simply hit return.
 Data point 1: 
-No data was entered.
+No data points to be analyzed.
 
  ----jGRASP: operation complete.
- 
+
  ----jGRASP exec: java JavaStats
-Enter 1 for keyboard input, 2 for file input: 
-2
+Enter 1 for keyboard input, 2 for file input: 2
 Enter pathname of data file: testdata1.txt
 Data point 1: 60.00
 Data point 2: 62.00
@@ -258,8 +240,7 @@ For 10 data point(s),
  ----jGRASP: operation complete.
 
  ----jGRASP exec: java JavaStats
-Enter 1 for keyboard input, 2 for file input: 
-2
+Enter 1 for keyboard input, 2 for file input: 2
 Enter pathname of data file: testdata2.txt
 Data point 1: 23.50
 For 1 data point(s), 
@@ -270,11 +251,16 @@ For 1 data point(s),
  ----jGRASP: operation complete.
 
  ----jGRASP exec: java JavaStats
-Enter 1 for keyboard input, 2 for file input: 
-2
+Enter 1 for keyboard input, 2 for file input: 2
 Enter pathname of data file: testdata3.txt
-File testdata3.txt contains no data.
+No data points to be analyzed.
 
  ----jGRASP: operation complete.
- 
+
+ ----jGRASP exec: java JavaStats
+Enter 1 for keyboard input, 2 for file input: 2
+Enter pathname of data file: testdata4.txt
+File testdata4.txt does not exist.
+
+ ----jGRASP: operation complete.
  */
