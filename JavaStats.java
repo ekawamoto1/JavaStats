@@ -8,8 +8,6 @@ public class JavaStats
     {
         ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
         int n = 0;
-        double[] minmax = new double[2];
-        double term, mean, med, stdev;
         String s = "";
         int sLen;
         
@@ -29,7 +27,7 @@ public class JavaStats
                 //System.out.println("You entered " + s + ", length " + sLen);
                 if (sLen > 0)
                 {
-                    term = Double.parseDouble(s);
+                    double term = Double.parseDouble(s);
                     dArrL.add(term);
                     n++;
                 }
@@ -49,7 +47,7 @@ public class JavaStats
                     sLen = s.length();
                     if (sLen > 0)
                     {
-                        term = Double.parseDouble(s);
+                        double term = Double.parseDouble(s);
                         dArrL.add(term);
                         n++;
                     }
@@ -68,26 +66,7 @@ public class JavaStats
             return;
         }
         
-        if (n > 0)
-        {
-            minmax = ComputeExtremes(dArrL);
-            mean = ComputeMean(dArrL);
-            System.out.printf("For %d data point(s), \n", n);
-            System.out.printf("    the maximum is %.2f\n", minmax[1]);
-            System.out.printf("    the minimum is %.2f\n", minmax[0]);
-            System.out.printf("    the mean (average) is %.2f\n", mean);
-            if (n > 1)    // std dev is only defined if n > 1
-            {
-                med = ComputeMedian(dArrL);
-                System.out.printf("    the median is %.2f\n", med);
-                stdev = ComputeStdev(dArrL, mean);
-                System.out.printf("    the std dev is %.2f\n", stdev);
-            }        
-        }
-        else
-        {
-            System.out.println("No data points to be analyzed.");
-        }
+        PrintOutStats(dArrL);
     }
     
     
@@ -214,6 +193,32 @@ public class JavaStats
         }
         
         return median;
+    }
+    
+    private static void PrintOutStats(ArrayList<Double> inArr)
+    {
+        int n = inArr.size();
+        
+        if (n > 0)
+        {
+            double[] minmax = ComputeExtremes(inArr);
+            double mean = ComputeMean(inArr);
+            System.out.printf("For %d data point(s), \n", n);
+            System.out.printf("    the maximum is %.2f\n", minmax[1]);
+            System.out.printf("    the minimum is %.2f\n", minmax[0]);
+            System.out.printf("    the mean (average) is %.2f\n", mean);
+            if (n > 1)    // std dev is only defined if n > 1
+            {
+                double med = ComputeMedian(inArr);
+                System.out.printf("    the median is %.2f\n", med);
+                double stdev = ComputeStdev(inArr, mean);
+                System.out.printf("    the std dev is %.2f\n", stdev);
+            }        
+        }
+        else
+        {
+            System.out.println("No data points to be analyzed.");
+        }    
     }
     
 }
