@@ -7,9 +7,6 @@ public class JavaStats
     public static void main(String[] args) throws Exception
     {
         ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
-        int n = 0;
-        String s = "";
-        int sLen;
         
         System.out.print("Enter 1 for keyboard input, 2 for file input: ");
         int mode = sc.nextInt();
@@ -18,20 +15,7 @@ public class JavaStats
         if (mode == 1)    // data entered from keyboard
         {
             System.out.println("When no more data is left to enter, simply hit return.");
-
-            do    // loop to get data entered from keyboard and store it in dArrL
-            {
-                System.out.printf("Data point %d: ", (n + 1));
-                s = sc.nextLine();
-                sLen = s.length();
-                //System.out.println("You entered " + s + ", length " + sLen);
-                if (sLen > 0)
-                {
-                    double term = Double.parseDouble(s);
-                    dArrL.add(term);
-                    n++;
-                }
-            } while (sLen > 0);
+            dArrL = GetDataPointsFromConsole();
         }
         else if (mode == 2)    // data read from file
         {
@@ -40,18 +24,7 @@ public class JavaStats
             File f = new File(fName);
             if (f.exists())
             {
-                Scanner scf = new Scanner(f);
-                while (scf.hasNextLine())
-                {
-                    s = scf.nextLine();
-                    sLen = s.length();
-                    if (sLen > 0)
-                    {
-                        double term = Double.parseDouble(s);
-                        dArrL.add(term);
-                        n++;
-                    }
-                }
+                dArrL = GetDataPointsFromFile(f);
                 PrintDataPoints(dArrL);
             }
             else
@@ -69,6 +42,45 @@ public class JavaStats
         PrintOutStats(dArrL);
     }
     
+    private static ArrayList<Double> GetDataPointsFromConsole()
+    {
+        ArrayList<Double> outArrL = new ArrayList<>();
+        int n = 0;
+        int sLen;
+        do    // loop to get data entered from keyboard and store it in dArrL
+        {
+            System.out.printf("Data point %d: ", (n + 1));
+            String s = sc.nextLine();
+            sLen = s.length();
+            //System.out.println("You entered " + s + ", length " + sLen);
+            if (sLen > 0)
+            {
+                double term = Double.parseDouble(s);
+                outArrL.add(term);
+                n++;
+            }
+        } while (sLen > 0);  
+        
+        return outArrL;  
+    }
+    
+    private static ArrayList<Double> GetDataPointsFromFile(File fIn) throws Exception
+    {
+        ArrayList<Double> outArrL = new ArrayList<>();
+        Scanner scf = new Scanner(fIn);
+        while (scf.hasNextLine())
+        {
+            String s = scf.nextLine();
+            int sLen = s.length();
+            if (sLen > 0)
+            {
+                double term = Double.parseDouble(s);
+                outArrL.add(term);
+            }
+        }
+        
+        return outArrL;  
+    }
     
     private static void PrintDataPoints(ArrayList<Double> inArr)
     {
