@@ -5,10 +5,14 @@ public class JavaStats
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args)
     {
-        //int N = 100;
-        //double dArr[];
-        //dArr = new double[N]; // initialize array with N elements
         ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
+        int n = 0;
+        double term = 0.0;
+        double sum = 0.0;
+        double mean = 0.0;
+        double max = -1.0E10;
+        double min = 1.0E10;
+        double stdev = 0.0;
         
         System.out.println("Enter 1 for keyboard input, 2 for file input: ");
         int mode = sc.nextInt();
@@ -19,13 +23,7 @@ public class JavaStats
             System.out.println("When no more data is left to enter, simply hit return.");
             String s = "";
             int sLen = 1;
-            int n = 0;
-            double term = 0.0;
-            double sum = 0.0;
-            double mean = 0.0;
-            double max = -1.0E10;
-            double min = 1.0E10;
-            double stdev = 0.0;
+
             do
             {
                 System.out.printf("Data point %d: ", (n + 1));
