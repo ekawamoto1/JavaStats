@@ -54,28 +54,7 @@ public class JavaStats
                         n++;
                     }
                 }
-                if (n > 0)
-                {
-                    if (n < 10)    // print all data points
-                    {
-                        for (int i = 0; i < n; i++)
-                        {
-                            System.out.printf("Data point %d: %.2f\n", i + 1, dArrL.get(i));
-                        }
-                    }
-                    else    // just print first and last five data points
-                    {
-                        for (int i = 0; i < 5; i++)
-                        {
-                            System.out.printf("Data point %d: %.2f\n", i + 1, dArrL.get(i));
-                        }
-                        System.out.println("     ... ");
-                        for (int i = n - 5; i < n; i++)
-                        {
-                            System.out.printf("Data point %d: %.2f\n", i + 1, dArrL.get(i));
-                        }                    
-                    }
-                }
+                PrintDataPoints(dArrL);
             }
             else
             {
@@ -107,6 +86,37 @@ public class JavaStats
         {
             System.out.println("No data points to be analyzed.");
         }
+    }
+    
+    
+    private static void PrintDataPoints(ArrayList<Double> inArr)
+    {
+        int n = inArr.size();
+        
+        if (n > 0)
+        {
+            if (n < 10)    // print all data points
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    System.out.printf("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                }
+            }
+            else    // just print first and last five data points
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    System.out.printf("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                }
+                System.out.println("     ... ");
+                for (int i = n - 5; i < n; i++)
+                {
+                    System.out.printf("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                }                    
+            }
+        }
+        
+        return;
     }
     
     private static double[] ComputeExtremes(ArrayList<Double> inArr)
