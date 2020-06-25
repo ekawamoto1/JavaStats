@@ -9,7 +9,7 @@ public class JavaStats
         ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
         int n = 0;
         double[] minmax = new double[2];
-        double term, mean, stdev;
+        double term, mean, med, stdev;
         String s = "";
         int sLen;
         
@@ -78,6 +78,8 @@ public class JavaStats
             System.out.printf("    the mean (average) is %.2f\n", mean);
             if (n > 1)    // std dev is only defined if n > 1
             {
+                med = ComputeMedian(dArrL);
+                System.out.printf("    the median is %.2f\n", med);
                 stdev = ComputeStdev(dArrL, mean);
                 System.out.printf("    the std dev is %.2f\n", stdev);
             }        
@@ -186,36 +188,85 @@ public class JavaStats
         return stdev;    // returns 0 if n < 2
     }
     
+    private static double ComputeMedian(ArrayList<Double> inArr)
+    {
+        double median = 0.0;
+        int n = inArr.size();
+        
+        if (n > 1)
+        {            
+            Collections.sort(inArr);
+            int m0 = n / 2;
+            if (n % 2 == 0)
+            {
+                median = (inArr.get(m0 - 1) + inArr.get(m0)) / 2.0;
+            }
+            else
+            {
+                median = inArr.get(m0);
+            }
+            /*
+            for (int i = 0; i < n; i++)
+            {
+                System.out.printf("Sorted data point %d: %.2f\n", i + 1, inArr.get(i));
+            }
+            */
+        }
+        
+        return median;
+    }
+    
 }
 
 /*
  ----jGRASP exec: java JavaStats
 Enter 1 for keyboard input, 2 for file input: 1
 When no more data is left to enter, simply hit return.
-Data point 1: 1
-Data point 2: 2
-Data point 3: 3
-Data point 4: 4
-Data point 5: 5
-Data point 6: 6
+Data point 1: 6
+Data point 2: 1
+Data point 3: 5
+Data point 4: 2
+Data point 5: 4
+Data point 6: 3
 Data point 7: 
 For 6 data point(s), 
     the maximum is 6.00
     the minimum is 1.00
     the mean (average) is 3.50
+    the median is 3.50
     the std dev is 1.87
+
+ ----jGRASP: operation complete.
+ 
+ ----jGRASP exec: java JavaStats
+Enter 1 for keyboard input, 2 for file input: 1
+When no more data is left to enter, simply hit return.
+Data point 1: 7
+Data point 2: 6
+Data point 3: 5
+Data point 4: 4
+Data point 5: 3
+Data point 6: 2
+Data point 7: 1
+Data point 8: 
+For 7 data point(s), 
+    the maximum is 7.00
+    the minimum is 1.00
+    the mean (average) is 4.00
+    the median is 4.00
+    the std dev is 2.16
 
  ----jGRASP: operation complete.
 
  ----jGRASP exec: java JavaStats
 Enter 1 for keyboard input, 2 for file input: 1
 When no more data is left to enter, simply hit return.
-Data point 1: 3.5
+Data point 1: 3.4
 Data point 2: 
 For 1 data point(s), 
-    the maximum is 3.50
-    the minimum is 3.50
-    the mean (average) is 3.50
+    the maximum is 3.40
+    the minimum is 3.40
+    the mean (average) is 3.40
 
  ----jGRASP: operation complete.
 
@@ -245,6 +296,7 @@ For 10 data point(s),
     the maximum is 68.00
     the minimum is 57.00
     the mean (average) is 61.00
+    the median is 60.00
     the std dev is 3.50
 
  ----jGRASP: operation complete.
