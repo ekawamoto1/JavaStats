@@ -5,9 +5,10 @@ public class JavaStats
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args)
     {
-        int N = 100;
-        double dArr[];
-        dArr = new double[N]; // initialize array with N elements
+        //int N = 100;
+        //double dArr[];
+        //dArr = new double[N]; // initialize array with N elements
+        ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
         
         System.out.println("Enter 1 for keyboard input, 2 for file input: ");
         int mode = sc.nextInt();
@@ -42,7 +43,8 @@ public class JavaStats
                     {
                         min = term;
                     }
-                    dArr[n] = term;
+                    //dArr[n] = term;
+                    dArrL.add(term);
                     n++;
                     sum += term;
                 }
@@ -59,7 +61,8 @@ public class JavaStats
                     sum = 0.0;
                     for (int i = 0; i < n; i++)
                     {
-                        term = dArr[i] - mean;
+                        //term = dArr[i] - mean;
+                        term = dArrL.get(i) - mean;
                         sum += term * term;
                         stdev = Math.sqrt(sum / (double) (n - 1));
                     }
