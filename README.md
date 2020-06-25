@@ -7,6 +7,7 @@ formatting tips: [Basic writing and formatting syntax](https://help.github.com/e
 template: [Best README Template](https://github.com/othneildrew/Best-README-Template)
 
 getting started with git: [Most Basic Git Commands with Examples](https://rubygarage.org/blog/most-basic-git-commands-with-examples)
+also helpful: [Git on the commandline](https://dont-be-afraid-to-commit.readthedocs.io/en/latest/git/commandlinegit.html) 
 
 # Contact
 
