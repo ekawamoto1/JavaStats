@@ -1,26 +1,27 @@
 import java.util.*;
+import java.io.*;
 
 public class JavaStats
 {
     static Scanner sc = new Scanner(System.in);
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
         int n = 0;
         double[] minmax = new double[2];
         double term, mean, stdev;
+        String s = "";
+        int sLen;
         
-        System.out.println("Enter 1 for keyboard input, 2 for file input: ");
+        System.out.print("Enter 1 for keyboard input, 2 for file input: ");
         int mode = sc.nextInt();
-        sc.nextLine();  // this consumes the '\n' that follows the integer from the preceding entry
+        sc.nextLine();  // this consumes the '\n' that follows the integer from the preceding call to sc.nextInt()
         
         if (mode == 1)    // data entered from keyboard
         {
             System.out.println("When no more data is left to enter, simply hit return.");
-            String s = "";
-            int sLen;
 
-            do
+            do    // loop to get data entered from keyboard and store it in dArrL
             {
                 System.out.printf("Data point %d: ", (n + 1));
                 s = sc.nextLine();
@@ -55,6 +56,66 @@ public class JavaStats
         }
         else if (mode == 2)    // data read from file
         {
+            System.out.print("Enter pathname of data file: ");
+            String fName = sc.nextLine();
+            File f = new File(fName);
+            if (f.exists())
+            {
+                Scanner scf = new Scanner(f);
+                while (scf.hasNextLine())
+                {
+                    s = scf.nextLine();
+                    sLen = s.length();
+                    if (sLen > 0)
+                    {
+                        term = Double.parseDouble(s);
+                        dArrL.add(term);
+                        n++;
+                    }
+                }
+                if (n > 0)
+                {
+                    if (n < 10)    // print all data points
+                    {
+                        for (int i = 0; i < n; i++)
+                        {
+                            System.out.printf("Data point %d: %.2f\n", i + 1, dArrL.get(i));
+                        }
+                    }
+                    else    // just print first and last five data points
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            System.out.printf("Data point %d: %.2f\n", i + 1, dArrL.get(i));
+                        }
+                        System.out.println("     ... ");
+                        for (int i = n - 5; i < n; i++)
+                        {
+                            System.out.printf("Data point %d: %.2f\n", i + 1, dArrL.get(i));
+                        }                    
+                    }
+                    
+                    minmax = ComputeExtremes(dArrL);
+                    mean = ComputeMean(dArrL);
+                    System.out.printf("For %d data point(s), \n", n);
+                    System.out.printf("    the maximum is %.2f\n", minmax[1]);
+                    System.out.printf("    the minimum is %.2f\n", minmax[0]);
+                    System.out.printf("    the mean (average) is %.2f\n", mean);
+                    if (n > 1)    // std dev is only defined if n > 1
+                    {
+                        stdev = ComputeStdev(dArrL, mean);
+                        System.out.printf("    the std dev is %.2f\n", stdev);
+                    }
+                }
+                else
+                {
+                    System.out.printf("File %s contains no data.\n", fName);
+                }
+            }
+            else
+            {
+                System.out.printf("File %s does not exist.\n", fName);
+            }
         }
         else
         {
@@ -64,13 +125,14 @@ public class JavaStats
     
     private static double[] ComputeExtremes(ArrayList<Double> inArr)
     {
-        double max = -1.0E10;
-        double min = 1.0E10;
-        double term;
         double[] extremes = {0.0, 0.0};
         int n = inArr.size();
+        
         if (n > 0)
         {
+            double max = -1.0E10;
+            double min = 1.0E10;
+            double term;
             for (int i = 0; i < n; i++)
             {
                 term = inArr.get(i);
@@ -94,6 +156,7 @@ public class JavaStats
     {
         double mean = 0.0;
         int n = inArr.size();
+        
         if (n > 0)
         {
             double sum = 0.0;
@@ -104,13 +167,14 @@ public class JavaStats
             mean = sum / (double) n;
         }
         
-        return mean;
+        return mean;    // returns 0 if n < 1
     }
 
     private static double ComputeStdev(ArrayList<Double> inArr, double mean)
     {
         double stdev = 0.0;
         int n = inArr.size();
+        
         if (n > 1)
         {
             double sum = 0.0;
@@ -123,7 +187,7 @@ public class JavaStats
             stdev = Math.sqrt(sum / (double) (n - 1));
         }
 
-        return stdev;
+        return stdev;    // returns 0.0 if n < 2
     }
     
 }
@@ -168,4 +232,49 @@ When no more data is left to enter, simply hit return.
 Data point 1: 
 No data was entered.
 
- ----jGRASP: operation complete.*/
+ ----jGRASP: operation complete.
+ 
+ ----jGRASP exec: java JavaStats
+Enter 1 for keyboard input, 2 for file input: 
+2
+Enter pathname of data file: testdata1.txt
+Data point 1: 60.00
+Data point 2: 62.00
+Data point 3: 57.00
+Data point 4: 58.00
+Data point 5: 68.00
+     ... 
+Data point 6: 65.00
+Data point 7: 63.00
+Data point 8: 59.00
+Data point 9: 60.00
+Data point 10: 58.00
+For 10 data point(s), 
+    the maximum is 68.00
+    the minimum is 57.00
+    the mean (average) is 61.00
+    the std dev is 3.50
+
+ ----jGRASP: operation complete.
+
+ ----jGRASP exec: java JavaStats
+Enter 1 for keyboard input, 2 for file input: 
+2
+Enter pathname of data file: testdata2.txt
+Data point 1: 23.50
+For 1 data point(s), 
+    the maximum is 23.50
+    the minimum is 23.50
+    the mean (average) is 23.50
+
+ ----jGRASP: operation complete.
+
+ ----jGRASP exec: java JavaStats
+Enter 1 for keyboard input, 2 for file input: 
+2
+Enter pathname of data file: testdata3.txt
+File testdata3.txt contains no data.
+
+ ----jGRASP: operation complete.
+ 
+ */
