@@ -12,5 +12,5 @@ getting started with git: [Most Basic Git Commands with Examples](https://rubyga
 
 Eric H. Kawamoto: eric.kawamoto@baxter-academy.org
 
-Project Link: 
+Project Link: https://github.com/ekawamoto1/JavaStats
 
