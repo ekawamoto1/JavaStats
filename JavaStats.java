@@ -49,20 +49,7 @@ public class JavaStats
                     }
   
                     outStr = PrintDataPoints(dArrL);
-                    
-                    double[] minmax = ComputeExtremes(dArrL);
-                    double mean = ComputeMean(dArrL);
-                    outStr += String.format("\nFor %d data point(s), \n", n);
-                    outStr += String.format("    the maximum is %.2f\n", minmax[1]);
-                    outStr += String.format("    the minimum is %.2f\n", minmax[0]);
-                    outStr += String.format("    the mean (average) is %.2f\n", mean);
-                    if (n > 1)    // std dev is only defined if n > 1
-                    {
-                        double med = ComputeMedian(dArrL);
-                        outStr += String.format("    the median is %.2f\n", med);
-                        double stdev = ComputeStdev(dArrL, mean);
-                        outStr += String.format("    the std dev is %.2f\n", stdev);
-                    }        
+                    outStr += PrintOutStats(dArrL);      
                 }
                 else
                 {
@@ -92,42 +79,13 @@ public class JavaStats
                     }
                     
                     outStr = PrintDataPoints(dArrL);
-                    
-                    if (dArrL.isEmpty())
-                    {
-                        outStr += "Data file " + fName + " is empty.";
-                    }
-                    else
-                    {
-                        n = dArrL.size();
-                        if (n > 0)
-                        {
-                            double[] minmax = ComputeExtremes(dArrL);
-                            double mean = ComputeMean(dArrL);
-                            outStr += String.format("\nFor %d data point(s), \n", n);
-                            outStr += String.format("    the maximum is %.2f\n", minmax[1]);
-                            outStr += String.format("    the minimum is %.2f\n", minmax[0]);
-                            outStr += String.format("    the mean (average) is %.2f\n", mean);
-                            if (n > 1)    // std dev is only defined if n > 1
-                            {
-                                double med = ComputeMedian(dArrL);
-                                outStr += String.format("    the median is %.2f\n", med);
-                                double stdev = ComputeStdev(dArrL, mean);
-                                outStr += String.format("    the std dev is %.2f\n", stdev);
-                            }        
-                        }
-                        else
-                        {
-                            outStr = "No data points to be analyzed.\n";
-                        }
-                    }
-                    JOptionPane.showMessageDialog(null, outStr);                        
+                    outStr += PrintOutStats(dArrL);                     
                 }
                 else
                 {
-                    outStr = "File " + fName + " does not exist.";
-                    JOptionPane.showMessageDialog(null, outStr);
+                    outStr = "No file chosen.";
                 }
+                JOptionPane.showMessageDialog(null, outStr);
                 break;
             default:
                 JOptionPane.showMessageDialog(null, "Invalid mode; exiting program.");
