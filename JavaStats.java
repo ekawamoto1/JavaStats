@@ -19,19 +19,13 @@ public class JavaStats
         }
         else if (mode == 2)    // data read from file
         {
-            System.out.print("Enter pathname of data file: ");
-            String fName = sc.nextLine();
-            File f = new File(fName);
-            if (f.exists())
+            dArrL = GetDataPointsFromFile();
+            if (dArrL.isEmpty())
             {
-                dArrL = GetDataPointsFromFile(f);
-                PrintDataPoints(dArrL);
-            }
-            else
-            {
-                System.out.printf("File %s does not exist.\n", fName);
+                System.out.println("Data file is empty.");
                 return;
             }
+            PrintDataPoints(dArrL);
         }
         else
         {
@@ -64,19 +58,30 @@ public class JavaStats
         return outArrL;  
     }
     
-    private static ArrayList<Double> GetDataPointsFromFile(File fIn) throws Exception
+    private static ArrayList<Double> GetDataPointsFromFile() throws Exception
     {
         ArrayList<Double> outArrL = new ArrayList<>();
-        Scanner scf = new Scanner(fIn);
-        while (scf.hasNextLine())
-        {
-            String s = scf.nextLine();
-            int sLen = s.length();
-            if (sLen > 0)
+        System.out.print("Enter pathname of data file: ");
+        String fName = sc.nextLine();
+        File f = new File(fName);
+        
+        if (f.exists())
+        {        
+            Scanner scf = new Scanner(f);
+            while (scf.hasNextLine())
             {
-                double term = Double.parseDouble(s);
-                outArrL.add(term);
+                String s = scf.nextLine();
+                int sLen = s.length();
+                if (sLen > 0)
+                {
+                    double term = Double.parseDouble(s);
+                    outArrL.add(term);
+                }
             }
+        }
+        else
+        {
+            System.out.printf("File %s does not exist.\n", fName);
         }
         
         return outArrL;  
@@ -254,17 +259,17 @@ For 6 data point(s),
     the std dev is 1.87
 
  ----jGRASP: operation complete.
- 
+
  ----jGRASP exec: java JavaStats
 Enter 1 for keyboard input, 2 for file input: 1
 When no more data is left to enter, simply hit return.
 Data point 1: 7
-Data point 2: 6
-Data point 3: 5
-Data point 4: 4
-Data point 5: 3
-Data point 6: 2
-Data point 7: 1
+Data point 2: 1
+Data point 3: 6
+Data point 4: 2
+Data point 5: 5
+Data point 6: 3
+Data point 7: 4
 Data point 8: 
 For 7 data point(s), 
     the maximum is 7.00
@@ -278,12 +283,12 @@ For 7 data point(s),
  ----jGRASP exec: java JavaStats
 Enter 1 for keyboard input, 2 for file input: 1
 When no more data is left to enter, simply hit return.
-Data point 1: 3.4
+Data point 1: 3.5
 Data point 2: 
 For 1 data point(s), 
-    the maximum is 3.40
-    the minimum is 3.40
-    the mean (average) is 3.40
+    the maximum is 3.50
+    the minimum is 3.50
+    the mean (average) is 3.50
 
  ----jGRASP: operation complete.
 
@@ -332,7 +337,7 @@ For 1 data point(s),
  ----jGRASP exec: java JavaStats
 Enter 1 for keyboard input, 2 for file input: 2
 Enter pathname of data file: testdata3.txt
-No data points to be analyzed.
+Data file is empty.
 
  ----jGRASP: operation complete.
 
@@ -340,6 +345,7 @@ No data points to be analyzed.
 Enter 1 for keyboard input, 2 for file input: 2
 Enter pathname of data file: testdata4.txt
 File testdata4.txt does not exist.
+Data file is empty.
 
  ----jGRASP: operation complete.
- */
+*/
