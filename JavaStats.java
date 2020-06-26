@@ -1,10 +1,42 @@
 import java.util.*;
 import java.io.*;
+import javax.swing.JOptionPane;
 
 public class JavaStats
 {
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) throws Exception
+    {
+        if (args.length > 0)
+        {
+            JavaStatsGUIApp(args[0]);
+        }
+        else
+        {
+            JavaStatsConsoleApp();
+        }
+    }
+    
+    
+    public static void JavaStatsGUIApp(String sMode) throws Exception
+    {
+        int mode = Integer.parseInt(sMode);
+        
+        switch (mode)
+        {
+            case 1:
+                JOptionPane.showMessageDialog(null, "mode 1");
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(null, "mode 2");
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Invalid mode; exiting program.");
+                return;
+        }
+    }
+    
+    public static void JavaStatsConsoleApp() throws Exception
     {
         ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
         
