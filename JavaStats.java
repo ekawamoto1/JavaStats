@@ -33,29 +33,32 @@ public class JavaStats
                 String s1 = "Enter values separated by commas: ";
                 String s2 = JOptionPane.showInputDialog(null, s1, "Data entry", JOptionPane.OK_CANCEL_OPTION);
                 //JOptionPane.showMessageDialog(null, s2);
-                String[] s0 = s2.split(",");
-                n = s0.length;
-                if (n > 0)
-                {
-                    for (int i = 0; i < n; i++)
-                    {
-                        int sLen = s0[i].length();
-                        //System.out.println("You entered " + s + ", length " + sLen);
-                        if (sLen > 0)
-                        {
-                            double term = Double.parseDouble(s0[i]);
-                            dArrL.add(term);
-                        }
-                    }
-  
-                    outStr = PrintDataPoints(dArrL);
-                    outStr += PrintOutStats(dArrL);      
-                }
-                else
+                if (s2.length() == 0)
                 {
                     outStr = "No data points to be analyzed.\n";
                 }
-                JOptionPane.showMessageDialog(null, outStr);                  
+                else
+                {
+                    String[] s0 = s2.split(",");
+                    n = s0.length;    // n = 1 even if s2 is an empty string
+                    if (n > 0)
+                    {
+                        for (int i = 0; i < n; i++)
+                        {
+                            int sLen = s0[i].length();
+                            //System.out.println("You entered " + s + ", length " + sLen);
+                            if (sLen > 0)
+                            {
+                                double term = Double.parseDouble(s0[i]);
+                                dArrL.add(term);
+                            }
+                        }
+      
+                        outStr = PrintDataPoints(dArrL);
+                        outStr += PrintOutStats(dArrL);      
+                    }
+                }
+                JOptionPane.showMessageDialog(null, outStr, "data and stats", JOptionPane.PLAIN_MESSAGE);                  
                 break;
             case 2:
                 JFileChooser j = new JFileChooser();
@@ -85,10 +88,10 @@ public class JavaStats
                 {
                     outStr = "No file chosen.";
                 }
-                JOptionPane.showMessageDialog(null, outStr);
+                JOptionPane.showMessageDialog(null, outStr, "Data and stats", JOptionPane.PLAIN_MESSAGE);
                 break;
             default:
-                JOptionPane.showMessageDialog(null, "Invalid mode; exiting program.");
+                JOptionPane.showMessageDialog(null, "Invalid mode; exiting program.", "Oops", JOptionPane.WARNING_MESSAGE);
                 return;
         }
     }
