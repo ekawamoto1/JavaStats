@@ -1,17 +1,18 @@
 import java.util.*;
 import java.io.*;
 import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
 
 public class JavaStats
 {
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) throws Exception
     {
-        if (args.length > 0)
+        if (args.length > 0)    // run with a command-line argument: 1 for manual input, 2 for file input
         {
             JavaStatsGUIApp(args[0]);
         }
-        else
+        else    // run without command-line arguments, or from IDE
         {
             JavaStatsConsoleApp();
         }
@@ -20,15 +21,113 @@ public class JavaStats
     
     public static void JavaStatsGUIApp(String sMode) throws Exception
     {
+        ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
+        String outStr = "";
+        String fName = "";
+        int n = 0;
         int mode = Integer.parseInt(sMode);
         
         switch (mode)
         {
             case 1:
-                JOptionPane.showMessageDialog(null, "mode 1");
+                String s1 = "Enter values separated by commas: ";
+                String s2 = JOptionPane.showInputDialog(null, s1, "Data entry", JOptionPane.OK_CANCEL_OPTION);
+                //JOptionPane.showMessageDialog(null, s2);
+                String[] s0 = s2.split(",");
+                n = s0.length;
+                if (n > 0)
+                {
+                    for (int i = 0; i < n; i++)
+                    {
+                        int sLen = s0[i].length();
+                        //System.out.println("You entered " + s + ", length " + sLen);
+                        if (sLen > 0)
+                        {
+                            double term = Double.parseDouble(s0[i]);
+                            dArrL.add(term);
+                        }
+                    }
+  
+                    outStr = PrintDataPoints(dArrL);
+                    
+                    double[] minmax = ComputeExtremes(dArrL);
+                    double mean = ComputeMean(dArrL);
+                    outStr += String.format("\nFor %d data point(s), \n", n);
+                    outStr += String.format("    the maximum is %.2f\n", minmax[1]);
+                    outStr += String.format("    the minimum is %.2f\n", minmax[0]);
+                    outStr += String.format("    the mean (average) is %.2f\n", mean);
+                    if (n > 1)    // std dev is only defined if n > 1
+                    {
+                        double med = ComputeMedian(dArrL);
+                        outStr += String.format("    the median is %.2f\n", med);
+                        double stdev = ComputeStdev(dArrL, mean);
+                        outStr += String.format("    the std dev is %.2f\n", stdev);
+                    }        
+                }
+                else
+                {
+                    outStr = "No data points to be analyzed.\n";
+                }
+                JOptionPane.showMessageDialog(null, outStr);                  
                 break;
             case 2:
-                JOptionPane.showMessageDialog(null, "mode 2");
+                JFileChooser j = new JFileChooser();
+                j.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                int result = j.showOpenDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION)
+                {
+                    File f = j.getSelectedFile();
+                    fName = f.getAbsolutePath();
+                    //JOptionPane.showMessageDialog(null, fName);    
+                    Scanner scf = new Scanner(f);
+                    while (scf.hasNextLine())
+                    {
+                        String s = scf.nextLine();
+                        int sLen = s.length();
+                        if (sLen > 0)
+                        {
+                            double term = Double.parseDouble(s);
+                            dArrL.add(term);
+                        }
+                    }
+                    
+                    outStr = PrintDataPoints(dArrL);
+                    
+                    if (dArrL.isEmpty())
+                    {
+                        outStr += "Data file " + fName + " is empty.";
+                    }
+                    else
+                    {
+                        n = dArrL.size();
+                        if (n > 0)
+                        {
+                            double[] minmax = ComputeExtremes(dArrL);
+                            double mean = ComputeMean(dArrL);
+                            outStr += String.format("\nFor %d data point(s), \n", n);
+                            outStr += String.format("    the maximum is %.2f\n", minmax[1]);
+                            outStr += String.format("    the minimum is %.2f\n", minmax[0]);
+                            outStr += String.format("    the mean (average) is %.2f\n", mean);
+                            if (n > 1)    // std dev is only defined if n > 1
+                            {
+                                double med = ComputeMedian(dArrL);
+                                outStr += String.format("    the median is %.2f\n", med);
+                                double stdev = ComputeStdev(dArrL, mean);
+                                outStr += String.format("    the std dev is %.2f\n", stdev);
+                            }        
+                        }
+                        else
+                        {
+                            outStr = "No data points to be analyzed.\n";
+                        }
+                    }
+                    JOptionPane.showMessageDialog(null, outStr);                        
+                }
+                else
+                {
+                    outStr = "File " + fName + " does not exist.";
+                    JOptionPane.showMessageDialog(null, outStr);
+                }
                 break;
             default:
                 JOptionPane.showMessageDialog(null, "Invalid mode; exiting program.");
@@ -46,12 +145,12 @@ public class JavaStats
         
         if (mode == 1)    // data entered from keyboard
         {
-             dArrL = GetDataPointsFromConsole();
+            dArrL = GetDataPointsFromConsole();
         }
         else if (mode == 2)    // data read from file
         {
             dArrL = GetDataPointsFromFile();
-            PrintDataPoints(dArrL);
+            System.out.print(PrintDataPoints(dArrL));
         }
         else
         {
@@ -59,7 +158,7 @@ public class JavaStats
             return;
         }
         
-        PrintOutStats(dArrL);
+        System.out.print(PrintOutStats(dArrL));
     }
     
     private static ArrayList<Double> GetDataPointsFromConsole()
@@ -119,8 +218,9 @@ public class JavaStats
         return outArrL;  
     }
     
-    private static void PrintDataPoints(ArrayList<Double> inArr)
+    private static String PrintDataPoints(ArrayList<Double> inArr)
     {
+        String outStr = "";
         int n = inArr.size();
         
         if (n > 0)
@@ -129,24 +229,24 @@ public class JavaStats
             {
                 for (int i = 0; i < n; i++)
                 {
-                    System.out.printf("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                    outStr += String.format("Data point %d: %.2f\n", i + 1, inArr.get(i));
                 }
             }
             else    // just print first and last five data points
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    System.out.printf("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                    outStr += String.format("Data point %d: %.2f\n", i + 1, inArr.get(i));
                 }
-                System.out.println("     ... ");
+                outStr += String.format("     ... \n");
                 for (int i = n - 5; i < n; i++)
                 {
-                    System.out.printf("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                    outStr += String.format("Data point %d: %.2f\n", i + 1, inArr.get(i));
                 }                    
             }
         }
         
-        return;
+        return outStr;
     }
     
     private static double[] ComputeExtremes(ArrayList<Double> inArr)
@@ -244,30 +344,33 @@ public class JavaStats
         return median;
     }
     
-    private static void PrintOutStats(ArrayList<Double> inArr)
+    private static String PrintOutStats(ArrayList<Double> inArr)
     {
+        String outStr = "";
         int n = inArr.size();
         
         if (n > 0)
         {
             double[] minmax = ComputeExtremes(inArr);
             double mean = ComputeMean(inArr);
-            System.out.printf("\nFor %d data point(s), \n", n);
-            System.out.printf("    the maximum is %.2f\n", minmax[1]);
-            System.out.printf("    the minimum is %.2f\n", minmax[0]);
-            System.out.printf("    the mean (average) is %.2f\n", mean);
+            outStr += String.format("\nFor %d data point(s), \n", n);
+            outStr += String.format("    the maximum is %.2f\n", minmax[1]);
+            outStr += String.format("    the minimum is %.2f\n", minmax[0]);
+            outStr += String.format("    the mean (average) is %.2f\n", mean);
             if (n > 1)    // std dev is only defined if n > 1
             {
                 double med = ComputeMedian(inArr);
-                System.out.printf("    the median is %.2f\n", med);
+                outStr += String.format("    the median is %.2f\n", med);
                 double stdev = ComputeStdev(inArr, mean);
-                System.out.printf("    the std dev is %.2f\n", stdev);
+                outStr += String.format("    the std dev is %.2f\n", stdev);
             }        
         }
         else
         {
-            System.out.println("\nNo data points to be analyzed.");
-        }    
+            outStr += String.format("\nNo data points to be analyzed.");
+        }
+        
+        return outStr;  
     }
     
 }
