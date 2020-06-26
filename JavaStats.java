@@ -39,8 +39,8 @@ public class JavaStats
                 }
                 else
                 {
-                    String[] s0 = s2.split(",");
-                    n = s0.length;    // n = 1 even if s2 is an empty string
+                    String[] s0 = s2.split(",");    // returns 1 even if s2 is empty
+                    n = s0.length;
                     if (n > 0)
                     {
                         for (int i = 0; i < n; i++)
@@ -58,7 +58,7 @@ public class JavaStats
                         outStr += PrintOutStats(dArrL);      
                     }
                 }
-                JOptionPane.showMessageDialog(null, outStr, "data and stats", JOptionPane.PLAIN_MESSAGE);                  
+                JOptionPane.showMessageDialog(null, outStr, "Data and stats", JOptionPane.PLAIN_MESSAGE);                  
                 break;
             case 2:
                 JFileChooser j = new JFileChooser();
