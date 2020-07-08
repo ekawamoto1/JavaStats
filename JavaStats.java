@@ -130,7 +130,7 @@ public class JavaStats
         int sLen;
         
         System.out.println("\nWhen no more data is left to enter, simply hit return.");
-        do    // loop to get data entered from keyboard and store it in dArrL
+        do    // loop to get data entered from keyboard and store it in outArrL
         {
             System.out.printf("Data point %d: ", (n + 1));
             String s = sc.nextLine();
@@ -219,7 +219,7 @@ public class JavaStats
         double[] extremes = {0.0, 0.0};
         int n = inArr.size();
         
-        if (n > 0)
+        if (n > 0)    // max and min only defined for n > 0
         {
             double max = -1.0E10;
             double min = 1.0E10;
@@ -240,7 +240,7 @@ public class JavaStats
             extremes[1] = max;
         }
         
-        return extremes;
+        return extremes;  // returns zeros if n = 0
     }
     
     private static double ComputeMean(ArrayList<Double> inArr)
@@ -248,7 +248,7 @@ public class JavaStats
         double mean = 0.0;
         int n = inArr.size();
         
-        if (n > 0)
+        if (n > 0)    // mean only defined for n > 0
         {
             double sum = 0.0;
             for (int i = 0; i < n; i++)
@@ -266,7 +266,7 @@ public class JavaStats
         double stdev = 0.0;
         int n = inArr.size();
         
-        if (n > 1)
+        if (n > 1)    // stdev only defined for n > 1
         {
             double sum = 0.0;
             double term = 0.0;
@@ -286,15 +286,15 @@ public class JavaStats
         double median = 0.0;
         int n = inArr.size();
         
-        if (n > 1)
+        if (n > 1)    // median only defined for n > 1
         {            
-            Collections.sort(inArr);
+            Collections.sort(inArr);    // first, sort the data points
             int m0 = n / 2;
-            if (n % 2 == 0)
+            if (n % 2 == 0)    // if even number of pts, take average of the two middles
             {
                 median = (inArr.get(m0 - 1) + inArr.get(m0)) / 2.0;
             }
-            else
+            else    // if odd number of pts, take the middle one
             {
                 median = inArr.get(m0);
             }
@@ -306,7 +306,7 @@ public class JavaStats
             */
         }
         
-        return median;
+        return median;    // returns 0 if n < 2
     }
     
     private static String PrintOutStats(ArrayList<Double> inArr)
@@ -322,7 +322,7 @@ public class JavaStats
             outStr += String.format("    the maximum is %.2f\n", minmax[1]);
             outStr += String.format("    the minimum is %.2f\n", minmax[0]);
             outStr += String.format("    the mean (average) is %.2f\n", mean);
-            if (n > 1)    // std dev is only defined if n > 1
+            if (n > 1)    // median and stdev are only defined if n > 1
             {
                 double med = ComputeMedian(inArr);
                 outStr += String.format("    the median is %.2f\n", med);
@@ -340,8 +340,9 @@ public class JavaStats
     
 }
 
-/*
 
+
+/*
  ----jGRASP exec: java JavaStats
 Enter 1 for keyboard input, 2 for file input: 1
 
