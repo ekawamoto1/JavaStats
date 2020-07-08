@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.*;
 
 public class JavaStats
 {
@@ -63,23 +64,23 @@ public class JavaStats
             case 2:
                 JFileChooser j = new JFileChooser();
                 j.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                
+                // from https://www.geeksforgeeks.org/java-swing-jfilechooser/
+                // requires import of javax.swing.filechooser.*
+                // restrict the user to select files of all types 
+                j.setAcceptAllFileFilterUsed(false); 
+                // set a title for the dialog 
+                j.setDialogTitle("Select a .txt file"); 
+                // only allow files of .txt extension 
+                FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .txt files", "txt"); 
+                j.addChoosableFileFilter(restrict);
+                
                 int result = j.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION)
                 {
                     File f = j.getSelectedFile();
                     fName = f.getAbsolutePath();
-                    //JOptionPane.showMessageDialog(null, fName);    
-                    Scanner scf = new Scanner(f);
-                    while (scf.hasNextLine())
-                    {
-                        String s = scf.nextLine();
-                        int sLen = s.length();
-                        if (sLen > 0)
-                        {
-                            double term = Double.parseDouble(s);
-                            dArrL.add(term);
-                        }
-                    }
+                    dArrL = GetDataPointsFromFile(fName);
                     
                     outStr = PrintDataPoints(dArrL);
                     outStr += PrintOutStats(dArrL);                     
@@ -110,7 +111,7 @@ public class JavaStats
         }
         else if (mode == 2)    // data read from file
         {
-            dArrL = GetDataPointsFromFile();
+            dArrL = GetDataPointsFromFile("");
             System.out.print(PrintDataPoints(dArrL));
         }
         else
@@ -146,11 +147,14 @@ public class JavaStats
         return outArrL;  
     }
     
-    private static ArrayList<Double> GetDataPointsFromFile() throws Exception
+    private static ArrayList<Double> GetDataPointsFromFile(String fName) throws Exception
     {
         ArrayList<Double> outArrL = new ArrayList<>();
-        System.out.print("\nEnter pathname of data file: ");
-        String fName = sc.nextLine();
+        if (fName.length() == 0)
+        {
+            System.out.print("\nEnter pathname of data file: ");
+            fName = sc.nextLine();
+        }
         File f = new File(fName);
         
         if (f.exists())
@@ -328,7 +332,7 @@ public class JavaStats
         }
         else
         {
-            outStr += String.format("\nNo data points to be analyzed.");
+            outStr += String.format("\nNo data points to be analyzed.\n");
         }
         
         return outStr;  
