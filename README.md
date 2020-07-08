@@ -1,7 +1,5 @@
 # JavaStats README file
 
-Eric H. Kawamoto
-
 ## References
 formatting tips: [Basic writing and formatting syntax](https://help.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax)
 
@@ -23,11 +21,17 @@ using Java Swing JFileChooser: [Java Swing | JFileChooser](https://www.geeksforg
 
 ## Running Journal
 Wed 07/08: refactored to eliminate duplicated code for getting data from a file
+
 Fri 06/26: implemented a GUI version of console application
+
 Thu 06/25: implemented a sort to compute median
+
 Thu 06/25: implemented ability to read numerical data from file
+
 Thu 06/25: wrote body of code to compute max, min, mean, and stdev of a set of numerical data
+
 Wed 06/24: learned how to use git/Github and started JavaStats project 
+
 
 ## Contact
 
