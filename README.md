@@ -17,9 +17,15 @@ using open file dialog in Java: [Show simple open file dialog using JFileChooser
 
 using Java Swing JFileChooser: [Java Swing | JFileChooser](https://www.geeksforgeeks.org/java-swing-jfilechooser/)
 
+classes and objects: [Classes and Objects in Java](https://www.geeksforgeeks.org/classes-objects-java/#:~:text=Packages%20In%20Java-,Classes%20and%20Objects%20in%20Java,around%20the%20real%20life%20entities.&text=A%20class%20is%20a%20user,all%20objects%20of%20one%20type.)
 
+public Java class name vs. file name: [Java Class name vs Filename](https://medium.com/@mr.anmolsehgal/java-class-name-vs-filename-7e5fa8870e56)
+
+how to create, import, and compile Java packages: (Java Package](https://www.studytonight.com/java/package-in-java.php)
 
 ## Running Journal
+Mon 07/20: separated ArrayList and associated methods into a Dataset class
+
 Wed 07/08: refactored to eliminate duplicated code for getting data from a file
 
 Fri 06/26: implemented a GUI version of console application

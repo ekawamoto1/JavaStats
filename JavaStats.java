@@ -3,6 +3,7 @@ import java.io.*;
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
+import mypack.Dataset;
 
 public class JavaStats
 {
@@ -22,7 +23,7 @@ public class JavaStats
     
     public static void JavaStatsGUIApp(String sMode) throws Exception
     {
-        ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
+        Dataset ds = new Dataset();
         String outStr = "";
         String fName = "";
         int n = 0;
@@ -51,12 +52,12 @@ public class JavaStats
                             if (sLen > 0)
                             {
                                 double term = Double.parseDouble(s0[i]);
-                                dArrL.add(term);
+                                ds.AddPoint(term);
                             }
                         }
       
-                        outStr = PrintDataPoints(dArrL);
-                        outStr += PrintOutStats(dArrL);      
+                        outStr = PrintDataPoints(ds);
+                        outStr += PrintOutStats(ds);     
                     }
                 }
                 JOptionPane.showMessageDialog(null, outStr, "Data and stats", JOptionPane.PLAIN_MESSAGE);                  
@@ -80,10 +81,10 @@ public class JavaStats
                 {
                     File f = j.getSelectedFile();
                     fName = f.getAbsolutePath();
-                    dArrL = GetDataPointsFromFile(fName);
+                    ds = GetDataPointsFromFile(fName);
                     
-                    outStr = PrintDataPoints(dArrL);
-                    outStr += PrintOutStats(dArrL);                     
+                    outStr = PrintDataPoints(ds);
+                    outStr += PrintOutStats(ds);                    
                 }
                 else
                 {
@@ -99,20 +100,20 @@ public class JavaStats
     
     public static void JavaStatsConsoleApp() throws Exception
     {
-        ArrayList<Double> dArrL = new ArrayList<>();    // initialize empty ArrayList
-        
+        Dataset ds = new Dataset();
+
         System.out.print("Enter 1 for keyboard input, 2 for file input: ");
         int mode = sc.nextInt();
         sc.nextLine();  // this consumes the '\n' that follows the integer from the preceding call to sc.nextInt()
         
         if (mode == 1)    // data entered from keyboard
         {
-            dArrL = GetDataPointsFromConsole();
+            ds = GetDataPointsFromConsole();
         }
         else if (mode == 2)    // data read from file
         {
-            dArrL = GetDataPointsFromFile("");
-            System.out.print(PrintDataPoints(dArrL));
+            ds = GetDataPointsFromFile("");
+            System.out.print(PrintDataPoints(ds));
         }
         else
         {
@@ -120,12 +121,12 @@ public class JavaStats
             return;
         }
         
-        System.out.print(PrintOutStats(dArrL));
+        System.out.print(PrintOutStats(ds));
     }
     
-    private static ArrayList<Double> GetDataPointsFromConsole()
+    private static Dataset GetDataPointsFromConsole()
     {
-        ArrayList<Double> outArrL = new ArrayList<>();
+        Dataset ds = new Dataset();
         int n = 0;
         int sLen;
         
@@ -139,17 +140,17 @@ public class JavaStats
             if (sLen > 0)
             {
                 double term = Double.parseDouble(s);
-                outArrL.add(term);
+                ds.AddPoint(term);
                 n++;
             }
         } while (sLen > 0);  
         
-        return outArrL;  
+        return ds;  
     }
     
-    private static ArrayList<Double> GetDataPointsFromFile(String fName) throws Exception
+    private static Dataset GetDataPointsFromFile(String fName) throws Exception
     {
-        ArrayList<Double> outArrL = new ArrayList<>();
+        Dataset ds = new Dataset();
         if (fName.length() == 0)
         {
             System.out.print("\nEnter pathname of data file: ");
@@ -167,10 +168,10 @@ public class JavaStats
                 if (sLen > 0)
                 {
                     double term = Double.parseDouble(s);
-                    outArrL.add(term);
+                    ds.AddPoint(term);
                 }
             }
-            if (outArrL.isEmpty())
+            if (ds.GetNumPts() == 0)
             {
                 System.out.printf("Data file %s is empty.\n", fName);
             }
@@ -180,13 +181,13 @@ public class JavaStats
             System.out.printf("File %s does not exist.\n", fName);
         }
         
-        return outArrL;  
+        return ds;
     }
     
-    private static String PrintDataPoints(ArrayList<Double> inArr)
+    private static String PrintDataPoints(Dataset ds)
     {
         String outStr = "";
-        int n = inArr.size();
+        int n = ds.GetNumPts();
         
         if (n > 0)
         {
@@ -194,139 +195,44 @@ public class JavaStats
             {
                 for (int i = 0; i < n; i++)
                 {
-                    outStr += String.format("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                    outStr += String.format("Data point %d: %.2f\n", i + 1, ds.GetPoint(i));
                 }
             }
             else    // just print first and last five data points
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    outStr += String.format("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                    outStr += String.format("Data point %d: %.2f\n", i + 1, ds.GetPoint(i));
                 }
                 outStr += String.format("     ... \n");
                 for (int i = n - 5; i < n; i++)
                 {
-                    outStr += String.format("Data point %d: %.2f\n", i + 1, inArr.get(i));
+                    outStr += String.format("Data point %d: %.2f\n", i + 1, ds.GetPoint(i));
                 }                    
             }
         }
         
         return outStr;
     }
-    
-    private static double[] ComputeExtremes(ArrayList<Double> inArr)
-    {
-        double[] extremes = {0.0, 0.0};
-        int n = inArr.size();
-        
-        if (n > 0)    // max and min only defined for n > 0
-        {
-            double max = -1.0E10;
-            double min = 1.0E10;
-            double term;
-            for (int i = 0; i < n; i++)
-            {
-                term = inArr.get(i);
-                if (term > max)
-                {
-                    max = term;
-                }
-                if (term < min)
-                {
-                    min = term;
-                }
-            }
-            extremes[0] = min;
-            extremes[1] = max;
-        }
-        
-        return extremes;  // returns zeros if n = 0
-    }
-    
-    private static double ComputeMean(ArrayList<Double> inArr)
-    {
-        double mean = 0.0;
-        int n = inArr.size();
-        
-        if (n > 0)    // mean only defined for n > 0
-        {
-            double sum = 0.0;
-            for (int i = 0; i < n; i++)
-            {
-                sum += inArr.get(i);
-            }
-            mean = sum / (double) n;
-        }
-        
-        return mean;    // returns 0 if n < 1
-    }
-
-    private static double ComputeStdev(ArrayList<Double> inArr, double mean)
-    {
-        double stdev = 0.0;
-        int n = inArr.size();
-        
-        if (n > 1)    // stdev only defined for n > 1
-        {
-            double sum = 0.0;
-            double term = 0.0;
-            for (int i = 0; i < n; i++)
-            {
-                term = inArr.get(i) - mean;
-                sum += term * term;
-            }
-            stdev = Math.sqrt(sum / (double) (n - 1));
-        }
-
-        return stdev;    // returns 0 if n < 2
-    }
-    
-    private static double ComputeMedian(ArrayList<Double> inArr)
-    {
-        double median = 0.0;
-        int n = inArr.size();
-        
-        if (n > 1)    // median only defined for n > 1
-        {            
-            Collections.sort(inArr);    // first, sort the data points
-            int m0 = n / 2;
-            if (n % 2 == 0)    // if even number of pts, take average of the two middles
-            {
-                median = (inArr.get(m0 - 1) + inArr.get(m0)) / 2.0;
-            }
-            else    // if odd number of pts, take the middle one
-            {
-                median = inArr.get(m0);
-            }
-            /*
-            for (int i = 0; i < n; i++)
-            {
-                System.out.printf("Sorted data point %d: %.2f\n", i + 1, inArr.get(i));
-            }
-            */
-        }
-        
-        return median;    // returns 0 if n < 2
-    }
-    
-    private static String PrintOutStats(ArrayList<Double> inArr)
+     
+    private static String PrintOutStats(Dataset ds)
     {
         String outStr = "";
-        int n = inArr.size();
+        int n = ds.GetNumPts();
         
         if (n > 0)
         {
-            double[] minmax = ComputeExtremes(inArr);
-            double mean = ComputeMean(inArr);
+            double[] minmax = ds.ComputeExtremes();
+            double mean = ds.ComputeMean();
             outStr += String.format("\nFor %d data point(s), \n", n);
             outStr += String.format("    the maximum is %.2f\n", minmax[1]);
             outStr += String.format("    the minimum is %.2f\n", minmax[0]);
             outStr += String.format("    the mean (average) is %.2f\n", mean);
             if (n > 1)    // median and stdev are only defined if n > 1
             {
-                double med = ComputeMedian(inArr);
+                double med = ds.ComputeMedian();
                 outStr += String.format("    the median is %.2f\n", med);
-                double stdev = ComputeStdev(inArr, mean);
+                double stdev = ds.ComputeStdev();
                 outStr += String.format("    the std dev is %.2f\n", stdev);
             }        
         }
