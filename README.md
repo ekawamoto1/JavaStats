@@ -21,7 +21,7 @@ classes and objects: [Classes and Objects in Java](https://www.geeksforgeeks.org
 
 public Java class name vs. file name: [Java Class name vs Filename](https://medium.com/@mr.anmolsehgal/java-class-name-vs-filename-7e5fa8870e56)
 
-how to create, import, and compile Java packages: (Java Package](https://www.studytonight.com/java/package-in-java.php)
+how to create, import, and compile Java packages: [Java Package](https://www.studytonight.com/java/package-in-java.php)
 
 ## Running Journal
 Mon 07/20: separated ArrayList and associated methods into a Dataset class
